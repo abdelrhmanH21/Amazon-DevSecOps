@@ -6,6 +6,11 @@ pipeline{
     }
     environment {
         SCANNER_HOME=tool 'Sonar-Scanner'
+        APP_NAME = "Amazon-DevSecOps"
+        DOCKER_USER = "abdelrhmanh21"
+        DOCKER_PASS = 'DockerHub'
+        IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
+        IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
     }
     stages {
         stage('clean workspace'){
@@ -49,5 +54,31 @@ pipeline{
                 sh "trivy fs . > trivyfs.txt"
             }
         }
+      stage("Build & Push Docker Image") {
+             steps {
+                 script {
+                     docker.withRegistry('',DOCKER_PASS) {
+                         docker_image = docker.build "${IMAGE_NAME}"
+                     }
+                     docker.withRegistry('',DOCKER_PASS) {
+                         docker_image.push("${IMAGE_TAG}")
+                         docker_image.push('latest')
+                     }
+                 }
+             }
+      }
+        stage("TRIVY"){
+            steps{
+                sh "trivy image sevenajay/amazon:latest > trivyimage.txt"
+            }
+        }
+        stage ('Cleanup Artifacts') {
+             steps {
+                 script {
+                      sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
+                      sh "docker rmi ${IMAGE_NAME}:latest"
+                 }
+             }
+         }
     }
 }
