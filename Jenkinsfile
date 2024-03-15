@@ -7,6 +7,7 @@ pipeline{
     environment {
         SCANNER_HOME=tool 'sonar-scanner'
         APP_NAME = "amazon-devsecops"
+        RELEASE = "1.0.0"
         DOCKER_USER = "abdelrhmanh21"
         DOCKER_PASS = 'DockerHub'
         IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
