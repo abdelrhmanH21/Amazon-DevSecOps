@@ -68,11 +68,7 @@ pipeline{
                  }
              }
       }
-        stage("TRIVY"){
-            steps{
-                sh "trivy image sevenajay/amazon:latest > trivyimage.txt"
-            }
-        }
+
         stage ('Cleanup Artifacts') {
              steps {
                  script {
