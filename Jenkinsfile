@@ -5,7 +5,7 @@ pipeline{
         nodejs 'node16'
     }
     environment {
-        SCANNER_HOME=tool 'Sonar-Scanner'
+        SCANNER_HOME=tool 'sonar-scanner'
         APP_NAME = "amazon-devsecops"
         DOCKER_USER = "abdelrhmanh21"
         DOCKER_PASS = 'DockerHub'
